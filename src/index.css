@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Pixel&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import 'tailwindcss';
+
+@theme {
+  --font-geist-pixel: 'Geist Pixel', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --color-first-color: #fbefef;
+  --color-second-color: #ffe2e2;
+  --color-third-color: #f5cbcb;
+  --color-fourth-color: #c5b3d3;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.bg-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+
+  background-size:
+    72px 72px,
+    72px 72px;
+
+  mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+
+  pointer-events: none;
+
+  animation: grid-move 20s linear infinite;
+}
+
+.animated-ring {
+  background: conic-gradient(#ffe2e2, #f5cbcb, #c5b3d3, #ffe2e2);
+
+  animation: spin-ring 8s linear infinite;
+
+  filter: blur(1px);
+}
+
+@keyframes grid-move {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 72px 72px;
+  }
+}
+
+@keyframes spin-ring {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
