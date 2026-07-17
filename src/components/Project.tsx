@@ -168,7 +168,7 @@ export default function Project() {
 
   const changeActiveProject = (param: string) => {
     setActiveProject(param)
-    setActivePicProject(null)
+    setActivePicProject('')
   }
 
   return (
