@@ -61,8 +61,8 @@ const fieldVariants: Variants = {
 
 export default function Contact() {
   return (
-    <div className="max-h-screen font-geist-pixel">
-      <div className="max-w-6xl mx-auto px-4 py-12 lg:px-0 max-h-screen">
+    <div className="min-h-screen font-geist-pixel">
+      <div className="max-w-6xl mx-auto px-4 py-12 lg:px-0">
         {/* Titre section */}
         <motion.div
           className="flex items-center gap-3"
