@@ -1,5 +1,7 @@
 import { Mail, Phone, MapPin, Send } from 'lucide-react'
 import { motion, type Variants } from 'motion/react'
+import { useState } from 'react'
+import emailjs from '@emailjs/browser'
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const
 
@@ -60,6 +62,55 @@ const fieldVariants: Variants = {
 }
 
 export default function Contact() {
+  const [loading, setLoading] = useState(false)
+
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    phone_number: '',
+    subject: '',
+    content: ''
+  })
+
+  const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      await emailjs.send(
+        'service_3s0k2p6',
+        'template_scqvemu',
+        {
+          from_name: form.name,
+          from_email: form.email,
+          from_number: form.phone_number,
+          subject: form.subject,
+          content: form.content
+        },
+        'lrnrVw6rHECHdRP5N'
+      )
+
+      setForm({
+        name: '',
+        email: '',
+        phone_number: '',
+        subject: '',
+        content: ''
+      })
+    } catch (error) {
+      console.error('Erreur envoi email:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen font-geist-pixel">
       <div className="max-w-6xl mx-auto px-4 py-12 lg:px-0">
@@ -128,7 +179,7 @@ export default function Contact() {
           </motion.div>
 
           {/* Partie droite */}
-          <div className="col-span-2">
+          <form className="col-span-2" onSubmit={handleSubmit}>
             <motion.div
               className="mt-2 lg:mt-0 grid grid-cols-2 gap-4"
               variants={formContainerVariants}
@@ -140,34 +191,54 @@ export default function Contact() {
                 <input
                   className="w-full px-4 py-3 bg-first-color rounded-md focus:outline-none focus:ring-2 focus:ring-fourth-color focus:border-transparent"
                   type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleInputOnChange}
                   placeholder="Name"
+                  required
                 />
               </motion.div>
               <motion.div variants={fieldVariants} className="col-span-2 md:col-span-1">
                 <input
                   className="w-full px-4 py-3 bg-first-color rounded-md focus:outline-none focus:ring-2 focus:ring-fourth-color focus:border-transparent"
                   type="text"
+                  name="email"
+                  value={form.email}
+                  onChange={handleInputOnChange}
                   placeholder="Email address"
+                  required
                 />
               </motion.div>
               <motion.div variants={fieldVariants} className="col-span-2 md:col-span-1">
                 <input
                   className="w-full px-4 py-3 bg-first-color rounded-md focus:outline-none focus:ring-2 focus:ring-fourth-color focus:border-transparent"
                   type="text"
+                  name="phone_number"
+                  value={form.phone_number}
+                  onChange={handleInputOnChange}
                   placeholder="Phone number"
+                  required
                 />
               </motion.div>
               <motion.div variants={fieldVariants} className="col-span-2 md:col-span-1">
                 <input
                   className="w-full px-4 py-3 bg-first-color rounded-md focus:outline-none focus:ring-2 focus:ring-fourth-color focus:border-transparent"
                   type="text"
+                  name="subject"
+                  value={form.subject}
+                  onChange={handleInputOnChange}
                   placeholder="Subject"
+                  required
                 />
               </motion.div>
               <motion.div variants={fieldVariants} className="col-span-2">
                 <textarea
                   className="w-full min-h-30 md:min-h-72  px-4 py-3 bg-first-color rounded-md focus:outline-none focus:ring-2 focus:ring-fourth-color resize-y"
                   placeholder="Message"
+                  name="content"
+                  value={form.content}
+                  onChange={handleInputOnChange}
+                  required
                 />
               </motion.div>
             </motion.div>
@@ -180,12 +251,14 @@ export default function Contact() {
               transition={{ duration: 0.45, ease: EASE_OUT, delay: 0.5 }}
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
+              disabled={loading}
+              type="submit"
               className="mt-3 flex gap-2 px-4 py-3 bg-fourth-color hover:bg-[#a177c2] text-white rounded-2xl cursor-pointer"
             >
               <Send />
-              Send message
+              {loading ? 'Sending...' : 'Send Message'}
             </motion.button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
